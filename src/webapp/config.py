@@ -12,6 +12,8 @@ class WebappConfig(BaseSettings):
     FLASK_APP: Optional[str] = Field(defauly="webapp")
     FLASK_ENV: Optional[str] = Field(default="dev")
 
+    TEMPLATES_FOLDER = "templates"
+
     class Config:
         env_prefix = ""
         case_sentive = False
