@@ -7,7 +7,6 @@ license = "MIT"
 packages = [
     { include = "webapp", from = "src" },
 ]
-include = ["src/webapp/templates/*"]
 
 [tool.poetry.dependencies]
 python = "^3.8"

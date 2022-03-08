@@ -1,10 +1,10 @@
 """Route declaration."""
-from flask import Response
-from flask import current_app as app
-from flask import jsonify, render_template
+from flask import Blueprint, Response, jsonify, render_template
+
+bp = Blueprint("home_bp", __name__, template_folder="templates")
 
 
-@app.route("/")
+@bp.route("/")
 def home() -> str:
     """Render the homepage of the website
 
@@ -20,7 +20,7 @@ def home() -> str:
     )
 
 
-@app.route("/health")
+@bp.route("/health")
 def health() -> Response:
     """Return a 200 OK response. Used for automated health checks
 
