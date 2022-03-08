@@ -14,6 +14,10 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y g++ libev-dev
+
       - name: Install poetry
         run: pip install poetry==1.1.12
 
