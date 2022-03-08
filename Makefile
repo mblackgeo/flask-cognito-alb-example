@@ -17,5 +17,5 @@ format:  ## Run black and isort to format the code
 	poetry run black .
 	poetry run isort .
 
-# local:  ## Run the webapp locally for debugging using Werkzeug
-# 	poetry run python src/webapp/app.py
+local:  ## Run the webapp locally for debugging using Werkzeug
+	poetry run python src/webapp/run.debug.py
