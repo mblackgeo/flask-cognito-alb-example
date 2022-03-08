@@ -19,3 +19,10 @@ format:  ## Run black and isort to format the code
 
 local:  ## Run the webapp locally for debugging using Werkzeug
 	poetry run python src/webapp/run.debug.py
+
+docker-build:  ## Build the containerised webapp
+	docker build -f Dockerfile -t "webapp:latest" .
+
+docker-run:  ## Run the containerised application locally
+	echo "Running at : http://localhost:5000/"
+	docker run -ti --net=host --env-file ./.env "webapp:latest"
