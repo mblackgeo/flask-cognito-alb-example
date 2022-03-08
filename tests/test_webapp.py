@@ -1,5 +1,11 @@
-from webapp import __version__
+def test_health(client):
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json == {"status": "ok"}
 
 
-def test_version():
-    assert __version__ == "0.1.0"
+def test_home(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "Welcome to the sample app" in str(response.data)
+    assert "<title>Sample webapp</title>" in str(response.data)
