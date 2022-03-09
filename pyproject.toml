@@ -14,7 +14,6 @@ Flask = "^2.0.3"
 pydantic = "^1.9.0"
 python-dotenv = "^0.19.2"
 bjoern = "^3.2.1"
-aws-cdk-lib = "2.15.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
@@ -28,6 +27,7 @@ pylint = "^2.12.2"
 pytest-cov = "^3.0.0"
 pytest-mock = "^3.7.0"
 constructs = ">=10.0.0,<11.0.0"
+aws-cdk-lib = "^2.15.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
