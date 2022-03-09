@@ -14,6 +14,7 @@ Flask = "^2.0.3"
 pydantic = "^1.9.0"
 python-dotenv = "^0.19.2"
 bjoern = "^3.2.1"
+requests = "^2.27.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
