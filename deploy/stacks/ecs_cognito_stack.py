@@ -186,5 +186,7 @@ class ECSCognitoStack(core.Stack):
                 user_pool_client=self.user_pool_client,
                 user_pool_domain=self.user_pool_custom_domain,
             ),
-            host_header=api_domain_name,
+            conditions=[
+                elb.ListenerCondition.host_headers([api_domain_name]),
+            ],
         )
