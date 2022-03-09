@@ -73,6 +73,7 @@ class ECSCognitoStack(core.Stack):
                     # after the logout has been completed
                     f"https://{api_domain_name}",
                 ],
+                logout_urls=[f"https://{api_domain_name}"],
                 flows=cognito.OAuthFlows(authorization_code_grant=True),
                 scopes=[cognito.OAuthScope.OPENID],
             ),
@@ -81,14 +82,7 @@ class ECSCognitoStack(core.Stack):
             ],
         )
 
-        # Logout URLs and redirect URIs can't be set in CDK constructs natively ...yet
-        user_pool_client_cf = self.user_pool_client.node.default_child
-        user_pool_client_cf.logout_ur_ls = [
-            # This is here to allow a redirect to the login page
-            # after the logout has been completed
-            f"https://{api_domain_name}"
-        ]
-
+        # TODO is this required
         self.user_pool_full_domain = self.user_pool_custom_domain.base_url()
         redirect_uri = urllib.parse.quote(f"https://{api_domain_name}")
         self.user_pool_logout_url = (
