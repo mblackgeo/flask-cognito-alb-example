@@ -54,3 +54,19 @@ def test_jwt_validator_wrong_aud(key, caplog, mocker):
 
     assert not JWTValidator(signed_jwt).is_valid()
     assert "Invalid 'aud' value" in caplog.text
+
+
+def test_jwt_validator_expired(key, caplog, mocker):
+    mocker.patch(
+        "webapp.auth.jwt_validator.JWTValidator.get_public_key", return_value=key
+    )
+    mocker.patch(
+        "webapp.auth.jwt_validator.JWTValidator.get_key_id", return_value="test"
+    )
+
+    jwt_token = make_jwt(claims={"exp": int(datetime.now().timestamp()) - 600})
+    jwt_token.make_signed_token(key)
+    signed_jwt = jwt_token.serialize()
+
+    assert not JWTValidator(signed_jwt).is_valid()
+    assert "Expired at" in caplog.text

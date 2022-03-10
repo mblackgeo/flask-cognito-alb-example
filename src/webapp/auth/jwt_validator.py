@@ -6,6 +6,7 @@ https://github.com/awslabs/aws-support-tools/tree/master/Cognito/decode-verify-j
 import base64
 import json
 import logging
+from typing import Dict, Optional
 
 import requests
 from flask import current_app as app
@@ -35,6 +36,31 @@ class JWTValidator:
         req = requests.get(url)
         return jwk.JWK.from_pem(bytes(req.text, encoding="utf-8"))
 
+    def decode_and_verify(
+        self, key: jwk.JWK, check_claims: Optional[Dict[str, str]] = None
+    ) -> jwt.JWT:
+        """Decode a verify a JWT with a given JWK
+
+        Parameters
+        ----------
+        key : jwk.JWK
+            They JSON Web Key used to verify the token
+        check_claims : Optional[Dict[str, str]], optional
+            Additional claims to check, by default None.
+            If not set, it will check expiry. If set it will check the passed
+            values instead.
+
+        Returns
+        -------
+        jwt.JWT
+            The decoded token
+        """
+        return jwt.JWT(
+            jwt=self.token,
+            key=key,
+            check_claims=check_claims,
+        )
+
     def is_valid(self) -> bool:
         """Return True if the JWT is signed by the ALB public key"""
         # get the key ID from the headers prior to verification
@@ -46,10 +72,16 @@ class JWTValidator:
             logging.warning("No matching public key not found to verify signature")
             return False
 
-        # Decode and verify the JWT, check the client ID claim
+        # Decode and verify the JWT, this will verify expiry as well
         try:
-            token = jwt.JWT(
-                jwt=self.token,
+            token = self.decode_and_verify(key=key)
+        except JWException as e:
+            logging.warning(e)
+            return False
+
+        # now check any additional claims are correct
+        try:
+            token = self.decode_and_verify(
                 key=key,
                 check_claims={"aud": app.config["COGNITO_APP_CLIENT_ID"]},
             )
@@ -57,7 +89,6 @@ class JWTValidator:
             logging.warning(e)
             return False
 
-        # TODO check expiry?
         logging.warning(f"Validated JWT : {token}")
 
         return True
