@@ -4,6 +4,8 @@ from flask import Blueprint, Response
 from flask import current_app as app
 from flask import jsonify, make_response, redirect, request, url_for
 
+from .jwt_validator import JWTValidator
+
 bp = Blueprint("auth_bp", __name__)
 
 
@@ -22,6 +24,15 @@ def user() -> Response:
         return response.json()
 
     return jsonify({"status": "Cognito not in use"})
+
+
+@bp.route("/verify")
+def verify() -> Response:
+    """
+    Verify the JWT is valid
+    """
+    access_token = request.headers.get("x-amzn-oidc-accesstoken")
+    return jsonify(JWTValidator(access_token).is_valid())
 
 
 @bp.route("/logout")
