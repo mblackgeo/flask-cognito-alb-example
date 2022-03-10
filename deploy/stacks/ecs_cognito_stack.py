@@ -135,6 +135,8 @@ class ECSCognitoStack(core.Stack):
                 environment={
                     "LOGOUT_URL": self.user_pool_logout_url,
                     "USER_INFO_URL": self.user_pool_user_info_url,
+                    "COGNITO_USERPOOL_ID": self.user_pool.user_pool_id,
+                    "COGNITO_APP_CLIENT_ID": self.user_pool_client.user_pool_client_id,
                 },
             ),
         )
