@@ -1,18 +1,21 @@
 """App configuration."""
-
 from os import urandom
 from os.path import abspath, dirname, join
-from typing import Optional
+from typing import Dict, Optional
 
 from pydantic import BaseSettings, Field
 
 
 class WebappConfig(BaseSettings):
     SECRET_KEY: Optional[str] = Field(default=str(urandom(32)))
-    FLASK_APP: Optional[str] = Field(defauly="webapp")
+    FLASK_APP: Optional[str] = Field(default="webapp")
     FLASK_ENV: Optional[str] = Field(default="dev")
-
     TEMPLATES_FOLDER = "templates"
+
+    AWS_REGION: Optional[str] = Field(default="eu-west-1")
+    COGNITO_USERPOOL_ID: Optional[str] = Field(default=None)
+    COGNITO_APP_CLIENT_ID: Optional[str] = Field(default=None)
+    COGNITO_PUBLIC_KEYS: Optional[Dict] = Field(default=None)
 
     class Config:
         env_prefix = ""
