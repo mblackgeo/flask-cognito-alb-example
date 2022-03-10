@@ -1,4 +1,5 @@
 import json
+import logging
 import urllib
 
 from flask import Flask
@@ -20,6 +21,8 @@ def create_app() -> Flask:
             f"https://cognito-idp.{region}.amazonaws.com/"
             f"{userpool_id}/.well-known/jwks.json"
         )
+
+        logging.info(f"Loading Cognito public keys from : {userpool_id}")
 
         with urllib.request.urlopen(keys_url) as f:
             response = f.read()
