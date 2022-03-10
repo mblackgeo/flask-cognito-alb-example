@@ -39,7 +39,7 @@ class JWTValidator:
     def decode_and_verify(
         self, key: jwk.JWK, check_claims: Optional[Dict[str, str]] = None
     ) -> jwt.JWT:
-        """Decode a verify a JWT with a given JWK
+        """Decode and verify a JWT with a given JWK
 
         Parameters
         ----------
