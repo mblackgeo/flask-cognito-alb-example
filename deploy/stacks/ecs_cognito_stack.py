@@ -48,6 +48,7 @@ class ECSCognitoStack(core.Stack):
                 email_subject=f"Verify your account for - {api_domain_name}",
                 email_style=cognito.VerificationEmailStyle.LINK,
             ),
+            removal_policy=core.RemovalPolicy.DESTROY,  # TODO not for prod
         )
 
         # TODO use a full subdomain here not a prefix
@@ -135,7 +136,6 @@ class ECSCognitoStack(core.Stack):
                 environment={
                     "LOGOUT_URL": self.user_pool_logout_url,
                     "USER_INFO_URL": self.user_pool_user_info_url,
-                    "COGNITO_USERPOOL_ID": self.user_pool.user_pool_id,
                     "COGNITO_APP_CLIENT_ID": self.user_pool_client.user_pool_client_id,
                 },
             ),
