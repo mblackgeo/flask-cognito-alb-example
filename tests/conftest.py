@@ -2,6 +2,7 @@ import logging
 import os
 
 import pytest
+from jwcrypto import jwk
 
 from webapp import create_app
 
@@ -15,12 +16,12 @@ def app():
     os.environ["SECRET_KEY"] = "not-used"
 
     _app = create_app()
-    _app.logger.setLevel(logging.CRITICAL)
     ctx = _app.test_request_context()
     ctx.push()
 
     _app.config["TESTING"] = True
     _app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] = False
+    _app.config["COGNITO_APP_CLIENT_ID"] = "test"
 
     _app.testing = True
 
@@ -32,3 +33,10 @@ def app():
 def client(app):
     cl = app.test_client()
     yield cl
+
+
+@pytest.fixture
+def key() -> jwk.JWK:
+    return jwk.JWK.generate(
+        kty="RSA", size=2048, kid="test", use="sig", e="AQAB", alg="RS256"
+    )
