@@ -119,6 +119,7 @@ class ECSCognitoStack(core.Stack):
         # Use the ApplicationLoadBalancedFargateService construct to pull the
         # local Dockerfile,
         # push the image to ECR, and deploy to Fargate
+        # TODO - how to delete from ECR when destroying the full stack?
         app = ecs_patterns.ApplicationLoadBalancedFargateService(
             self,
             f"{construct_id}-webservice",
