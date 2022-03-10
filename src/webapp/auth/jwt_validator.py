@@ -3,60 +3,61 @@ Utilis for verifying JSON Web Tokens
 See also:
 https://github.com/awslabs/aws-support-tools/tree/master/Cognito/decode-verify-jwt
 """
+import base64
+import json
 import logging
-import time
-from typing import Dict, List, Optional
 
+import requests
 from flask import current_app as app
-from jose import jwk, jwt
-from jose.utils import base64url_decode
+from jwcrypto import jwk, jwt
+from jwcrypto.common import JWException
 
 
 class JWTValidator:
     def __init__(self, token: str):
         self.token: str = token
-        self.keys: List[Dict[str, str]] = app.config["COGNITO_PUBLIC_KEYS"]
         self.client_id: str = app.config["COGNITO_APP_CLIENT_ID"]
 
-    def _get_public_key(self, kid: str) -> Optional[Dict[str, str]]:
-        for key in self.keys:
-            if key["kid"] == kid:
-                return key
-        return None
+        logging.warning(f"JWT:\n{self.token}")
+
+    def get_key_id(self) -> str:
+        """Extract the key ID from the JWT headers"""
+        jwt_headers = self.token.split(".")[0]
+        decoded_jwt_headers = base64.b64decode(jwt_headers)
+        decoded_jwt_headers = decoded_jwt_headers.decode("utf-8")
+        decoded_json = json.loads(decoded_jwt_headers)
+        return decoded_json["kid"]
+
+    def get_public_key(self, kid: str) -> jwk.JWK:
+        # The ALB signs the JWT with a dynamic key
+        region = app.config["AWS_REGION"]
+        url = f"https://public-keys.auth.elb.{region}.amazonaws.com/{kid}"
+        req = requests.get(url)
+        return jwk.JWK.from_pem(bytes(req.text, encoding="utf-8"))
 
     def is_valid(self) -> bool:
-        """Return True if the JWT is signed by the Cognito public keys"""
-        # get the public key ID from the headers prior to verification
-        headers = jwt.get_unverified_headers(self.token)
-        pkey = self._get_public_key(headers["kid"])
-        if pkey is None:
+        """Return True if the JWT is signed by the ALB public key"""
+        # get the key ID from the headers prior to verification
+        kid = self.get_key_id()
+
+        # Grab the actual public key from the ALB endpoint
+        key = self.get_public_key(kid)
+        if key is None:
             logging.warning("No matching public key not found to verify signature")
             return False
 
-        # construct the public key
-        public_key = jwk.construct(pkey)
-
-        # get the last two sections of the token
-        # message and signature (encoded in base64)
-        message, encoded_signature = str(self.token).rsplit(".", 1)
-
-        # decode and verify the signature
-        decoded_signature = base64url_decode(encoded_signature.encode("utf-8"))
-        if not public_key.verify(message.encode("utf8"), decoded_signature):
-            logging.warning("Signature verification failed")
+        # Decode and verify the JWT, check the client ID claim
+        try:
+            token = jwt.JWT(
+                jwt=self.token,
+                key=key,
+                check_claims={"aud": app.config["COGNITO_APP_CLIENT_ID"]},
+            )
+        except JWException as e:
+            logging.warning(e)
             return False
 
-        # since we passed the verification, can safely use the unverified claims
-        claims = jwt.get_unverified_claims(self.token)
-
-        # verify the token is not expired
-        if time.time() > claims["exp"]:
-            logging.warning("Token has expired")
-            return False
-
-        # check the audience is correct
-        if claims["aud"] != self.client_id:
-            logging.warning("Token was not issued for this audience")
-            return False
+        # TODO check expiry?
+        logging.warning(f"Validated JWT : {token}")
 
         return True
