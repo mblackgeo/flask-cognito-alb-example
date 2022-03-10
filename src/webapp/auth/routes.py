@@ -14,7 +14,6 @@ def user() -> Response:
     """
     Calls the Cognito User Info endpoint
     """
-
     url = app.config.get("USER_INFO_URL")
     if url:
         access_token = request.headers.get("x-amzn-oidc-accesstoken")
@@ -31,8 +30,12 @@ def verify() -> Response:
     """
     Verify the JWT is valid
     """
-    access_token = request.headers.get("x-amzn-oidc-accesstoken")
-    return jsonify(JWTValidator(access_token).is_valid())
+    url = app.config.get("USER_INFO_URL")
+    if url:
+        access_token = request.headers.get("x-amzn-oidc-accesstoken")
+        return jsonify(JWTValidator(access_token).is_valid())
+
+    return jsonify({"status": "Cognito not in use"})
 
 
 @bp.route("/logout")
