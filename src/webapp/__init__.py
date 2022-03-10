@@ -11,7 +11,7 @@ __all__ = ["__version__", "create_app"]
 def create_app() -> Flask:
     """Construct the core application."""
     app = Flask(__name__)
-    app.config.from_object("webapp.config.WebappConfig")
+    app.config.from_object("webapp.config.cfg")
 
     if app.config.get("COGNITO_USERPOOL_ID") is not None:
         # Populate the Cognito public keys
