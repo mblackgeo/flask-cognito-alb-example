@@ -25,7 +25,7 @@ def make_jwt(header=None, claims=None) -> jwt.JWT:
     return jwt.JWT(header=h, claims=c)
 
 
-def test_jwt_validator_valid_key(app, key, mocker):
+def test_jwt_validator_valid_key(key, mocker):
     mocker.patch(
         "webapp.auth.jwt_validator.JWTValidator.get_public_key", return_value=key
     )
@@ -40,7 +40,7 @@ def test_jwt_validator_valid_key(app, key, mocker):
     assert JWTValidator(signed_jwt).is_valid()
 
 
-def test_jwt_validator_wrong_aud(app, key, caplog, mocker):
+def test_jwt_validator_wrong_aud(key, caplog, mocker):
     mocker.patch(
         "webapp.auth.jwt_validator.JWTValidator.get_public_key", return_value=key
     )

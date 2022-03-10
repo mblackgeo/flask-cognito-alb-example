@@ -7,7 +7,7 @@ from jwcrypto import jwk
 from webapp import create_app
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def app():
     """Create application for the tests."""
     # setup testing config
