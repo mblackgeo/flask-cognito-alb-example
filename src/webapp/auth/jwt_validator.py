@@ -24,8 +24,7 @@ class JWTValidator:
     def get_key_id(self) -> str:
         """Extract the key ID from the JWT headers"""
         jwt_headers = self.token.split(".")[0]
-        decoded_jwt_headers = base64.b64decode(jwt_headers)
-        decoded_jwt_headers = decoded_jwt_headers.decode("utf-8")
+        decoded_jwt_headers = base64.b64decode(jwt_headers).decode("utf-8")
         decoded_json = json.loads(decoded_jwt_headers)
         return decoded_json["kid"]
 
