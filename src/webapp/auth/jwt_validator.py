@@ -1,7 +1,5 @@
 """
-Utilis for verifying JSON Web Tokens
-See also:
-https://github.com/awslabs/aws-support-tools/tree/master/Cognito/decode-verify-jwt
+Helper functions for verifying JSON Web Tokens
 """
 import base64
 import json
@@ -19,7 +17,7 @@ class JWTValidator:
         self.token: str = token
         self.client_id: str = app.config["COGNITO_APP_CLIENT_ID"]
 
-        logging.warning(f"JWT:\n{self.token}")
+        logging.warning(f"Incoming JWT:\n{self.token}")
 
     def get_key_id(self) -> str:
         """Extract the key ID from the JWT headers"""
@@ -29,6 +27,7 @@ class JWTValidator:
         return decoded_json["kid"]
 
     def get_public_key(self, kid: str) -> jwk.JWK:
+        """Retrive the public key PEM from the Elastic Load Balancer"""
         # The ALB signs the JWT with a dynamic key
         region = app.config["AWS_REGION"]
         url = f"https://public-keys.auth.elb.{region}.amazonaws.com/{kid}"
