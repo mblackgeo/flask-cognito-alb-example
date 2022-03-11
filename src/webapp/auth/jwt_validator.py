@@ -51,7 +51,7 @@ class JWTValidator:
                     "verify_aud": False,
                     "verify_iss": False,
                     "verify_exp": True,
-                    "verify_iat": True,
+                    "verify_iat": False,
                     "verify_nbf": False,
                 },
             )
