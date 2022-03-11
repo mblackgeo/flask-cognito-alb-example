@@ -2,7 +2,6 @@ import logging
 import os
 
 import pytest
-from jwcrypto import jwk
 
 from webapp import create_app
 
@@ -33,10 +32,3 @@ def app():
 def client(app):
     cl = app.test_client()
     yield cl
-
-
-@pytest.fixture
-def key() -> jwk.JWK:
-    return jwk.JWK.generate(
-        kty="RSA", size=2048, kid="test", use="sig", e="AQAB", alg="RS256"
-    )
