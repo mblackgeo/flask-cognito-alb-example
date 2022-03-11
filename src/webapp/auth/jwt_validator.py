@@ -36,10 +36,6 @@ class JWTValidator:
         # Grab the public key from the ALB endpoint
         pub_key = self.get_public_key(kid)
 
-        # TODO set to debug
-        logging.warning(f"Encoded token: {self.token}")
-        logging.warning(f"KID: {kid}")
-
         # decode and verify the JWT
         try:
             jwt.decode(
