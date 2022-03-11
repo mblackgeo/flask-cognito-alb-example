@@ -20,7 +20,7 @@ def make_jwt(header=None, claims=None) -> str:
     if claims:
         c.update(claims)
 
-    return jwt.encode(payload=c, headers=h, key="secret")
+    return jwt.encode(payload=c, headers=h, key="secret", algorithm="HS256")
 
 
 def test_jwt_validator_valid_key(mocker):
@@ -38,7 +38,6 @@ def test_jwt_validator_wrong_aud(mocker):
     )
 
     token = make_jwt(claims={"aud": "wrong"})
-
     assert not JWTValidator(token).is_valid()
 
 
@@ -48,5 +47,4 @@ def test_jwt_validator_expired(mocker):
     )
 
     token = make_jwt(claims={"exp": int(datetime.now().timestamp()) - 600})
-
     assert not JWTValidator(token).is_valid()
