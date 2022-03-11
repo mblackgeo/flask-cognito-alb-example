@@ -48,13 +48,12 @@ class JWTValidator:
                 algorithms=self.allowed_algorithms,
                 options={
                     "verify_signature": True,
-                    "verify_aud": True,
+                    "verify_aud": False,
                     "verify_iss": False,
                     "verify_exp": True,
                     "verify_iat": True,
                     "verify_nbf": False,
                 },
-                audience=app.config["COGNITO_APP_CLIENT_ID"],
             )
         except jwt.PyJWTError as err:
             logging.warning(f"Failed to verify token:\n{err}".format(err))
