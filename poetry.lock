@@ -190,20 +190,6 @@ ssh = ["bcrypt (>=3.1.5)"]
 test = ["pytest (>=6.2.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,!=3.79.2)"]
 
 [[package]]
-name = "deprecated"
-version = "1.2.13"
-description = "Python @deprecated decorator to deprecate old python classes, functions or methods."
-category = "main"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-
-[package.dependencies]
-wrapt = ">=1.10,<2"
-
-[package.extras]
-dev = ["tox", "bump2version (<1)", "sphinx (<2)", "importlib-metadata (<3)", "importlib-resources (<4)", "configparser (<5)", "sphinxcontrib-websupport (<2)", "zipp (<2)", "PyTest (<5)", "PyTest-Cov (<2.6)", "pytest", "pytest-cov"]
-
-[[package]]
 name = "distlib"
 version = "0.3.4"
 description = "Distribution utilities"
@@ -330,18 +316,6 @@ attrs = ">=21.2,<22.0"
 cattrs = {version = ">=1.8,<1.11", markers = "python_version >= \"3.7\""}
 python-dateutil = "*"
 typing-extensions = ">=3.7,<5.0"
-
-[[package]]
-name = "jwcrypto"
-version = "1.0"
-description = "Implementation of JOSE Web standards"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-cryptography = ">=2.3"
-deprecated = "*"
 
 [[package]]
 name = "lazy-object-proxy"
@@ -513,6 +487,20 @@ description = "passive checker of Python programs"
 category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[[package]]
+name = "pyjwt"
+version = "2.3.0"
+description = "JSON Web Token implementation in Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+crypto = ["cryptography (>=3.3.1)"]
+dev = ["sphinx", "sphinx-rtd-theme", "zope.interface", "cryptography (>=3.3.1)", "pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)", "mypy", "pre-commit"]
+docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
+tests = ["pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)"]
 
 [[package]]
 name = "pylint"
@@ -726,14 +714,14 @@ watchdog = ["watchdog"]
 name = "wrapt"
 version = "1.13.3"
 description = "Module for decorators, wrappers and monkey patching."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "42ea6bee68f42dbf0ea7c42a0aecf23878063a10b0d05b3665264ad1bf5f8af1"
+content-hash = "1d4917aea0a5770f03dce1acf62f181b8c73fb39a38ce0b2f97d1c27e61ed03b"
 
 [metadata.files]
 astroid = [
@@ -925,10 +913,6 @@ cryptography = [
     {file = "cryptography-36.0.1-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:39bdf8e70eee6b1c7b289ec6e5d84d49a6bfa11f8b8646b5b3dfe41219153316"},
     {file = "cryptography-36.0.1.tar.gz", hash = "sha256:53e5c1dc3d7a953de055d77bef2ff607ceef7a2aac0353b5d630ab67f7423638"},
 ]
-deprecated = [
-    {file = "Deprecated-1.2.13-py2.py3-none-any.whl", hash = "sha256:64756e3e14c8c5eea9795d93c524551432a0be75629f8f29e67ab8caf076c76d"},
-    {file = "Deprecated-1.2.13.tar.gz", hash = "sha256:43ac5335da90c31c24ba028af536a91d41d53f9e6901ddb021bcc572ce44e38d"},
-]
 distlib = [
     {file = "distlib-0.3.4-py2.py3-none-any.whl", hash = "sha256:6564fe0a8f51e734df6333d08b8b94d4ea8ee6b99b5ed50613f731fd4089f34b"},
     {file = "distlib-0.3.4.zip", hash = "sha256:e4b58818180336dc9c529bfb9a0b58728ffc09ad92027a3f30b7cd91e3458579"},
@@ -972,10 +956,6 @@ jinja2 = [
 jsii = [
     {file = "jsii-1.54.0-py3-none-any.whl", hash = "sha256:5d46b693ca180379e9ce565f0de158445352eae1e9b51d006905ebf9d2b8d9a0"},
     {file = "jsii-1.54.0.tar.gz", hash = "sha256:14aa49a4e4848d4f56937d1a98a5182de80875a4834062058587c3194ae5357d"},
-]
-jwcrypto = [
-    {file = "jwcrypto-1.0-py2.py3-none-any.whl", hash = "sha256:db93a656d9a7a35dda5a68deb5c9f301f4e60507d8aef1559e0637b9ac497137"},
-    {file = "jwcrypto-1.0.tar.gz", hash = "sha256:f88816eb0a41b8f006af978ced5f171f33782525006cdb055b536a40f4d46ac9"},
 ]
 lazy-object-proxy = [
     {file = "lazy-object-proxy-1.7.1.tar.gz", hash = "sha256:d609c75b986def706743cdebe5e47553f4a5a1da9c5ff66d76013ef396b5a8a4"},
@@ -1168,6 +1148,10 @@ pydantic = [
 pyflakes = [
     {file = "pyflakes-2.4.0-py2.py3-none-any.whl", hash = "sha256:3bb3a3f256f4b7968c9c788781e4ff07dce46bdf12339dcda61053375426ee2e"},
     {file = "pyflakes-2.4.0.tar.gz", hash = "sha256:05a85c2872edf37a4ed30b0cce2f6093e1d0581f8c19d7393122da7e25b2b24c"},
+]
+pyjwt = [
+    {file = "PyJWT-2.3.0-py3-none-any.whl", hash = "sha256:e0c4bb8d9f0af0c7f5b1ec4c5036309617d03d56932877f2f7a0beeb5318322f"},
+    {file = "PyJWT-2.3.0.tar.gz", hash = "sha256:b888b4d56f06f6dcd777210c334e69c737be74755d3e5e9ee3fe67dc18a0ee41"},
 ]
 pylint = [
     {file = "pylint-2.12.2-py3-none-any.whl", hash = "sha256:daabda3f7ed9d1c60f52d563b1b854632fd90035bcf01443e234d3dc794e3b74"},
