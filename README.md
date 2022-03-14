@@ -59,4 +59,4 @@ The application can be run locally through docker (`make docker-build && make do
 ## TODO
 
 - [ ] Separate out the monitlitic CDK stack
-- [ ] Add a route that verifies the claims with the Cognito user pool directly
+- [ ] Add a route that verifies the claims with the Cognito user pool directly (e.g. to get a list of Cognito groups for the user)
