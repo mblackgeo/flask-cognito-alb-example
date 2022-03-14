@@ -1,6 +1,6 @@
 # Flask - AWS Cognito integration example
 
-An example of an Application Load Balanced Fargate service deployed in Elastic Container Service (ECS) using [Flask](https://flask.palletsprojects.com/en/2.0.x/) and [AWS Cognito](https://aws.amazon.com/cognito/) with applied to the Load Balancer.
+An example of an Application Load Balanced Fargate service deployed in Elastic Container Service (ECS) using [Flask](https://flask.palletsprojects.com/en/2.0.x/) with [AWS Cognito](https://aws.amazon.com/cognito/) applied to the Load Balancer.
 
 * [`home`](src/webapp/home/routes.py): a simple homepage.
 * [`auth`](src/webapp/auth/routes.py): routes to check user info from Cognito, verify the JWT and logout.
