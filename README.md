@@ -5,7 +5,7 @@ An example of an Application Load Balanced Fargate service deployed in Elastic C
 * [`home`](src/webapp/home/routes.py): a simple homepage.
 * [`auth`](src/webapp/auth/routes.py): routes to check user info from Cognito, verify the JWT and logout.
 
-When accessing the the application, the load balancer will redirect a user to the Cognito hosted UI. After successful authentication with the user pool, the Load Balancer will set a new JWT which can be verified through the `/verify` endpoint.
+When accessing the the application, the load balancer will redirect a user to the Cognito hosted UI. After successful authentication with the user pool, the Load Balancer will set a new JSON Web Token (JWT) which can be verified through the `/verify` endpoint. Note that the [ALB sets this JWT](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html) in the HTTP header `x-amzn-oidc-data`, and this is not the same JWT that Cognito would issue. 
 
 For the deployment side, [CDK](https://aws.amazon.com/cdk/) python code is provided in [`/deploy`](/deploy/app.py). The CDK stacks will deploy the Flask application as a [docker container](Dockerfile) to ECS (backed by Fargate), with an Application Load Balancer in front. A Cognito User Pool is created along with a User Pool Client for the load balancer.
 
