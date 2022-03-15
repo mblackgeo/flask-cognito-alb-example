@@ -1,4 +1,4 @@
-# Flask - AWS Cognito integration example
+# Flask - Load Balancer + Cognito integration example
 
 An example of an Application Load Balanced Fargate service deployed in Elastic Container Service (ECS) using [Flask](https://flask.palletsprojects.com/en/2.0.x/) with [AWS Cognito](https://aws.amazon.com/cognito/) applied to the Load Balancer.
 
